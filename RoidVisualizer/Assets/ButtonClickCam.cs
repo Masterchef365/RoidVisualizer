@@ -4,6 +4,7 @@ using System.Collections;
 
 public class ButtonClickCam : MonoBehaviour {
 
+	//THIS IS BAD PRACTICE. NOTE TO SELF: FIX THIS SOON, DO NOT DO AGAIN...
 	GameObject cam;
 	void Start () {
 		cam = Camera.main.gameObject;

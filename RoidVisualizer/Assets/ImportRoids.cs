@@ -20,6 +20,8 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
+//THIS CODE HAS TERRIBLE PRACTICE IN IT. IT NEEDS A RE-WRITE!!
+
 public class ImportRoids : MonoBehaviour {
 	public GameObject roidPrefab;
 	public GameObject otherPrefab;
@@ -32,11 +34,12 @@ public class ImportRoids : MonoBehaviour {
 
 	public float scaleFactor = 1000f;
 	public bool showTerritory = true;
-	public string filter = "";
+	public List<string> filter;
 
 	public List<string> localGPS;
 	public List<GameObject> objects = new List<GameObject>();
 	public List<GameObject> buttons = new List<GameObject>();
+	public Transform filterContentPanel;
 
 	public string[] asteroidFlags = {"Au", "Gold", "Pt", "Platinum", "H2O", "Ice", "Fe", "Iron", "Ag", "Silver", "Co", "Cobalt", "Mg", "Magnesium", "Si", "Silicon", "Ni", "Nickel", "U", "Uranium"};
 
@@ -48,6 +51,7 @@ public class ImportRoids : MonoBehaviour {
 			Destroy(button);
 		}
 
+		//Downloading/Parsing
 		StreamReader urlFile = new StreamReader (Application.dataPath + @"\URL.txt"); //Load the URL File
 		string url = urlFile.ReadLine ();
 		urlFile.Close ();
@@ -55,19 +59,42 @@ public class ImportRoids : MonoBehaviour {
 		while (!googleSheetDL.isDone) {}
 		char[] tsvDelim = {'\t','\n'};
 		string[] sheetVals = googleSheetDL.text.Split (tsvDelim);
+
 		ArrayList coordList = new ArrayList ();
-		string roidListText = "Points:\n\n";
+
+
+		//Filtering
 		foreach (string str in sheetVals) {
-			if (str.Contains("GPS:") && str.ToLower().Contains(filter)) {
-				coordList.Add(str);
-			}
-		}
-		foreach (string str in localGPS) {
-			if (str.Contains("GPS:") && str.ToLower().Contains(filter)) {
-				coordList.Add(str);
+			if (str.Contains("GPS:")) {
+				if (filter.Count > 0) {
+					foreach (string filt in filter) {
+						if (str.ToLower().Contains(filt)) {
+							if (!coordList.Contains(str)) {
+								coordList.Add(str);
+							}
+						}
+					}
+				} else {
+					coordList.Add(str);
+				}
 			}
 		}
 
+		foreach (string str in localGPS) {
+			if (str.Contains("GPS:")) {
+				if (filter.Count > 0) {
+					foreach (string filt in filter) {
+						if (str.ToLower().Contains(filt)) {
+							coordList.Add(str);
+						}
+					}
+				} else {
+					coordList.Add(str);
+				}
+			}
+		}
+
+		string roidListText = "Points:\n\n";
 		for (int i = 0; i < coordList.Count; i++)
 		{
 			string[] coord = coordList[i].ToString().Split(':');
@@ -123,12 +150,18 @@ public class ImportRoids : MonoBehaviour {
 
 	public void AddRoid (string GPS) { //Added by text feild
 		localGPS.Add (GPS);
-		filter = "";
+		filter.Clear();
 		Start ();
 	}
 
 	public void Filter(string input) { //Filter by text feild
-		filter = input;
+		filter.Clear ();
+		foreach (Transform child in filterContentPanel) {
+			string inputText = child.Find("InputField").GetComponentsInChildren<Text>()[1].text;
+			if (inputText != "" & inputText != "+" & inputText != "-") {
+				filter.Add(inputText);
+			}
+		}
 		Start ();
 	}
 
@@ -165,11 +198,10 @@ public class ImportRoids : MonoBehaviour {
 		}
 	}
 
-	public static bool CaseInsensitiveBatchContains(string text, string[] contains) {
+	bool CaseInsensitiveBatchContains(string text, string[] contains) {
 		bool detected = false;
 		foreach (string str in contains) {
 			if (text.ToLower().Contains(str.ToLower())) {
-				Debug.Log(str.ToLower());
 				detected = true;
 				return detected;
 			}

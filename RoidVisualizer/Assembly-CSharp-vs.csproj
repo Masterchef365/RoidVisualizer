@@ -50,6 +50,7 @@
      <Compile Include="Assets\CameraMovement.cs" />
      <Compile Include="Assets\Clicked.cs" />
      <Compile Include="Assets\DrawPathLines.cs" />
+     <Compile Include="Assets\FilterObjectAction.cs" />
      <Compile Include="Assets\Grid.cs" />
      <Compile Include="Assets\GridOptimized.cs" />
      <Compile Include="Assets\ImportRoids.cs" />
