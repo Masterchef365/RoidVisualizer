@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class CameraMovement : MonoBehaviour {
 	
 	public float mouseSpeed = 0.2f;
+	public float scaleDivisor = 200f;
 
 	void Update () {
 
@@ -64,8 +65,9 @@ public class CameraMovement : MonoBehaviour {
 		mouseSpeed = input * 5f;
 	}
 
-	public void MoveToObserve (GPSDefinition.GPSPoint position) {
-		StartCoroutine (quickMove(transform.position, position.unityPosition)); //Moved back a bit
+	public void moveToObserve (GPSDefinition.GPSPoint position) {
+		Debug.Log("LOLZ");
+		StartCoroutine (quickMove(transform.position, position.unityPosition + (transform.forward) * (scaleDivisor / -3f))); //Moved back a bit
 	}
 
 	IEnumerator quickMove (Vector3 from, Vector3 to) {

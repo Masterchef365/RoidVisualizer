@@ -27,7 +27,7 @@ public class PointManager : MonoBehaviour {
 	public List<GameObject> pointObjects; //In-game objects
 	public List<GPSDefinition.GPSPoint> locationCache; //All the locations from import sources (Unfiltered)
 	public string[] asteroidFlags = {"Au", "Gold", "Pt", "Platinum", "H2O", "Ice", "Fe", "Iron", "Ag", "Silver", "Co", "Cobalt", "Mg", "Magnesium", "Si", "Silicon", "Ni", "Nickel", "U", "Uranium"}; //Things that make an asteroid an asteroid
-	
+
 	//Real time configurable
 	public bool showTerritory = true;
 	public List<string> filters;
@@ -39,12 +39,12 @@ public class PointManager : MonoBehaviour {
 	public GameObject asteroidMarkerPrefab; //What the roids look like
 	public GameObject otherMarkerPrefab; //A nice marker for other things (May add other categories soon!)
 
-	void Start () { //Begin for the first time
+	public void Start () { //Begin for the first time
 		reImport();
 		redisplay();
 	}
 
-	void reImport () { //Import/re-import the points from all sources
+	public void reImport () { //Import/re-import the points from all sources
 		//Google sheet ops
 		locationCache.Clear ();
 
@@ -59,7 +59,7 @@ public class PointManager : MonoBehaviour {
 		//Future site of local GPS importer for Jim's script!
 	}
 
-	void redisplay () { //Display cache contents
+	public void redisplay () { //Display cache contents
 		foreach (GameObject obj in pointObjects) { //*flush*
 			Destroy(obj);
 		}
@@ -123,6 +123,11 @@ public class PointManager : MonoBehaviour {
 
 	public void displayTerritory (bool show) {
 		showTerritory = show;
+		redisplay();
+	}
+
+	public void addTemporaryPoint (string GPS) {
+		locationCache.Add(new GPSDefinition.GPSPoint(GPS, scaleDivisor));
 	}
 
 }

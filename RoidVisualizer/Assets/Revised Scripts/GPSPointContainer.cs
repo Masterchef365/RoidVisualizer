@@ -7,6 +7,10 @@ public class GPSPointContainer : MonoBehaviour {
 	public GameObject contentPanel;
 	public GPSDefinition.GPSPoint point;
 
+	void Start() {
+		contentPanel = transform.parent.gameObject;
+	}
+
 	public void sendClick () {
 		contentPanel.SendMessage("sendClick", point);
 	}
