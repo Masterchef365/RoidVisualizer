@@ -79,12 +79,14 @@ public class PointManager : MonoBehaviour {
 					case "TERR_US": //Us
 						territoryObject = (GameObject)GameObject.Instantiate((GameObject)friendlyTerritoryPrefab, point.unityPosition, Quaternion.identity);
 						territoryObject.transform.localScale = new Vector3(size, size, size);
+						territoryObject.GetComponentsInChildren<TextMesh>()[0].text = "Freindly Territory";
 						pointObjects.Add(territoryObject);
 						break;
 
 					case "TERR_EN": //Enemy
 						territoryObject = (GameObject)GameObject.Instantiate((GameObject)hostileTerritoryPrefab, point.unityPosition, Quaternion.identity);
 						territoryObject.transform.localScale = new Vector3(size, size, size);
+						territoryObject.GetComponentsInChildren<TextMesh>()[0].text = "Hostile Territory";
 						pointObjects.Add(territoryObject);
 						break;
 
