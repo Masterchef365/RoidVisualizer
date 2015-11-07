@@ -12,13 +12,11 @@ public class DrawPathLines : MonoBehaviour {
 	public Text distanceOutput;
 	public float distance;
 
-	public void parseLines (string lines) {
+	public void parseLines (List<string> distancePoints) {
 		points.Clear ();
 		distance = 0f;
-		if (lines != "") { //Check for null
-			char[] lineDelim = {'\n'};
-			string[] coords = lines.Split (lineDelim, System.StringSplitOptions.RemoveEmptyEntries);
-			foreach (string gps in coords) {
+		if (distancePoints.Count > 0) { //Check for null
+			foreach (string gps in distancePoints) {
 				string[] coord = gps.Split (':');
 				if (coord.Length > 4) {
 					float x, y, z;

@@ -48,6 +48,7 @@
   <ItemGroup>
      <Compile Include="Assets\Revised Scripts\ButtonManager.cs" />
      <Compile Include="Assets\Revised Scripts\CameraMovement.cs" />
+     <Compile Include="Assets\Revised Scripts\DistanceListManager.cs" />
      <Compile Include="Assets\Revised Scripts\DrawPathLines.cs" />
      <Compile Include="Assets\Revised Scripts\FilterListManager.cs" />
      <Compile Include="Assets\Revised Scripts\GPSDefinition.cs" />
@@ -57,7 +58,7 @@
      <Compile Include="Assets\Revised Scripts\InputObjectLogic.cs" />
      <Compile Include="Assets\Revised Scripts\LookAtCamera.cs" />
      <Compile Include="Assets\Revised Scripts\PointManager.cs" />
-     <Compile Include="Assets\Revised Scripts\SectorView.cs" />
+     <Compile Include="Assets\URLFile.cs" />
      <None Include="Assets\GPL-license.txt" />
      <None Include="Assets\URL.txt" />
  <Reference Include="UnityEngine.UI">

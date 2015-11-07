@@ -1,11 +1,11 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Revised Scripts\PointManager.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="..\..\SBCEdit\Assets\Scripts\BranchPort.cs">
     <Files>
-      <File FileName="Assets\Revised Scripts\PointManager.cs" Line="89" Column="87" />
-      <File FileName="Assets\Revised Scripts\ButtonManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Revised Scripts\CameraMovement.cs" Line="1" Column="1" />
-      <File FileName="Assets\Revised Scripts\GPSPointContainer.cs" Line="1" Column="1" />
+      <File FileName="..\..\SBCEdit\Assets\Scripts\BranchPort.cs" Line="8" Column="75" />
+      <File FileName="..\..\SBCEdit\Assets\Scripts\MoveCamera.cs" Line="1" Column="1" />
+      <File FileName="..\..\SBCEdit\Assets\Scripts\PortConnector.cs" Line="21" Column="29" />
+      <File FileName="..\..\SBCEdit\Assets\Scripts\SplineDraw.cs" Line="63" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

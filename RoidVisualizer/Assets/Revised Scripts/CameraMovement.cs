@@ -5,23 +5,15 @@ using UnityEngine.UI;
 
 public class CameraMovement : MonoBehaviour {
 	
-	public float mouseSpeed = 0.2f;
+	public float mouseSpeed = 0.4f;
 	public float scaleDivisor = 200f;
 
 	void Update () {
 
 
-		if (Input.GetMouseButton (0)) {
+		if (Input.GetMouseButton (1)) {
 			Vector3 newRot = new Vector3(-Input.GetAxis("Mouse Y"), Input.GetAxis("Mouse X"), 0) * mouseSpeed + transform.rotation.eulerAngles;
 			transform.rotation = Quaternion.Euler (newRot);
-		}
-
-		if (Input.GetMouseButton (1)) {
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit;
-			if (Physics.Raycast(ray, out hit)) {
-				hit.collider.SendMessage("hit");
-			}
 		}
 
 		float speed;
@@ -57,6 +49,7 @@ public class CameraMovement : MonoBehaviour {
 		else
 		{
 			if (Input.GetKey ("c")) {
+                transform.Translate(-Vector3.up * speed, Space.Self);
 			}
 		}
 	}
@@ -66,7 +59,6 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 	public void moveToObserve (GPSDefinition.GPSPoint position) {
-		Debug.Log("LOLZ");
 		StartCoroutine (quickMove(transform.position, position.unityPosition + (transform.forward) * (scaleDivisor / -3f))); //Moved back a bit
 	}
 

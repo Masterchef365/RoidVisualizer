@@ -31,6 +31,7 @@ public class PointManager : MonoBehaviour {
 	//Real time configurable
 	public bool showTerritory = true;
 	public List<string> filters;
+    public string URL;
 
 	//Configurable
 	public GameObject buttonContentPanel;
@@ -40,23 +41,36 @@ public class PointManager : MonoBehaviour {
 	public GameObject otherMarkerPrefab; //A nice marker for other things (May add other categories soon!)
 
 	public void Start () { //Begin for the first time
-		reImport();
-		redisplay();
+		//reImport();
+		//redisplay();
 	}
+
+    public void boot(string tsvDir)
+    {
+        URL = tsvDir;
+        reImport();
+    }
 
 	public void reImport () { //Import/re-import the points from all sources
 		//Google sheet ops
 		locationCache.Clear ();
 
-		List<string> URL = Importing.readFile(Application.dataPath + @"\URL.txt");
-		List<string> sheet = Importing.downloadTSV(URL[0]);
-		foreach (string gps in sheet) {
-			if (gps.Contains("GPS:")) {
-				locationCache.Add(new GPSDefinition.GPSPoint(gps, scaleDivisor));
-			}
-		}
+        if (URL != null) { //Make sure we CAN load it...
+		    List<string> sheet = Importing.downloadTSV(URL);
+		    foreach (string gps in sheet) {
+			    if (gps.Contains("GPS:")) {
+				    locationCache.Add(new GPSDefinition.GPSPoint(gps, scaleDivisor));
+			    }
+		    }
+            redisplay();
+        }
+        else
+        {
+            //SHOW AN ERROR MESSAGE PLS
+            Debug.Log("No URL file");
+        }
 
-		//Future site of local GPS importer for Jim's script!
+		
 	}
 
 	public void redisplay () { //Display cache contents

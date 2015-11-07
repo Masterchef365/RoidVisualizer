@@ -28,7 +28,7 @@ public class FilterListManager : MonoBehaviour {
 	public void refreshList() {
 		filters.Clear();
 		foreach (GameObject inputObject in inputObjects) {
-			string text = inputObject.GetComponent<InputObjectLogic>().inputFieldText.GetComponent<Text>().text;
+            string text = inputObject.GetComponent<InputObjectLogic>().inputFieldText.GetComponent<InputField>().text;
 			if (text != "") {
 				filters.Add(text);
 			}
