@@ -1,6 +1,5 @@
 ﻿// Copyright (C) 2015 Duncan Freeman
 using UnityEngine;
-using System.Collections;
 
 public class GridOptimized : MonoBehaviour {
 	
@@ -11,15 +10,15 @@ public class GridOptimized : MonoBehaviour {
 	public bool subGrid = true;
 	public float sizeMin = -5000f;
 	public float sizeMax = 5000f;
-	private Material lineMat;
 	public bool showGrid = true;
 	public Vector3 offset = Vector3.zero;
 	float y = 0; //Floor
 	
 	void OnPostRender() {
 		if (showGrid) {
-			lineMat = CreateLineMaterial ();
-			lineMat.SetPass (0);
+			CreateLineMaterial ();
+            GL.PushMatrix();
+            lineMaterial.SetPass (0);
 
 			offset = new Vector3(((float)(int)(transform.position.x / mainIncrement))* mainIncrement, ((float)(int)(transform.position.y / mainIncrement))* mainIncrement, ((float)(int)(transform.position.z / mainIncrement))* mainIncrement);
 
@@ -28,13 +27,11 @@ public class GridOptimized : MonoBehaviour {
 			GL.Color(subColor);
 			if (subGrid) {
 				for (float z = sizeMin; z < sizeMax; z += subIncrement) {
-					//GL.Color (subColor * (1 - (Vector3.Distance(new Vector3(transform.position.x, transform.position.y, z), transform.position) * fallOff)));
 					GL.Vertex3 (sizeMin + offset.x, y, z + offset.z); //x Lines
 					GL.Vertex3 (sizeMax + offset.x, y, z + offset.z);
 				}
 				
 				for (float x = sizeMin; x < sizeMax; x += subIncrement) {
-					//GL.Color (subColor * (1 - (Vector3.Distance(new Vector3(x, transform.position.y, transform.position.z), transform.position) * fallOff)));
 					GL.Vertex3 (x + offset.x, y, sizeMin + offset.z); //x Lines
 					GL.Vertex3 (x + offset.x, y, sizeMax + offset.z);
 				}
@@ -43,13 +40,11 @@ public class GridOptimized : MonoBehaviour {
 			GL.Color(mainColor);
 			for (float y = sizeMin; y < sizeMax; y += mainIncrement) {
 				for (float z = sizeMin; z < sizeMax; z += mainIncrement) {
-					//GL.Color (mainColor * (1 - (Vector3.Distance(new Vector3(transform.position.x, y, z), transform.position) * fallOff)));
 					GL.Vertex3 (sizeMin + offset.x, y + offset.y, z + offset.z); //x Lines
 					GL.Vertex3 (sizeMax + offset.x, y + offset.y, z + offset.z);
 				}
 				
 				for (float x = sizeMin; x < sizeMax; x += mainIncrement) {
-					//GL.Color (mainColor * (1 - (Vector3.Distance(new Vector3(x, y, transform.position.z), transform.position) * fallOff)));
 					GL.Vertex3 (x + offset.x, y + offset.y, sizeMin + offset.z); //x Lines
 					GL.Vertex3 (x + offset.x, y + offset.y, sizeMax + offset.z);
 				}
@@ -57,35 +52,37 @@ public class GridOptimized : MonoBehaviour {
 			
 			for (float z = sizeMin; z < sizeMax; z += mainIncrement) {
 				for (float x = sizeMin; x < sizeMax; x += mainIncrement) {
-					//GL.Color (mainColor * (1 - (Vector3.Distance(new Vector3(x, transform.position.y, z), transform.position) * fallOff)));
 					GL.Vertex3 (x + offset.x, sizeMin + offset.y, z + offset.z);//y Lines
 					GL.Vertex3 (x + offset.x, sizeMax + offset.y, z + offset.z);
 				}
 			}
 			
 			GL.End ();
-		}
+            GL.PopMatrix();
+        }
 	}
-	
-	
-	
-	Material CreateLineMaterial() 
-	{
-		Material lineMaterial;
-		lineMaterial = new Material( "Shader \"Lines/Colored Blended\" {" +
-		                            "SubShader { Pass { " +
-		                            "    Blend SrcAlpha OneMinusSrcAlpha " +
-		                            "    ZTest Always " +
-		                            "    ZWrite Off Cull Off Fog { Mode Off } " +
-		                            "    BindChannels {" +
-		                            "      Bind \"vertex\", vertex Bind \"color\", color }" +
-		                            "} } }" );
-		lineMaterial.hideFlags = HideFlags.HideAndDontSave;
-		lineMaterial.shader.hideFlags = HideFlags.HideAndDontSave;
-		return lineMaterial;
-	}
-	
-	public void showLineGrid (bool input) {
+
+    static Material lineMaterial;
+    static void CreateLineMaterial()
+    {
+        if (!lineMaterial)
+        {
+            // Unity has a built-in shader that is useful for drawing
+            // simple colored things.
+            var shader = Shader.Find("Hidden/Internal-Colored");
+            lineMaterial = new Material(shader);
+            lineMaterial.hideFlags = HideFlags.HideAndDontSave;
+            // Turn on alpha blending
+            lineMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            lineMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            // Turn backface culling off
+            lineMaterial.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+            // Turn off depth writes
+            lineMaterial.SetInt("_ZWrite", 0);
+        }
+    }
+
+    public void showLineGrid (bool input) {
 		showGrid = input;
 	}
 	

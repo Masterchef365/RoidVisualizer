@@ -1,6 +1,5 @@
 ﻿// Copyright (C) 2015 Duncan Freeman
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
@@ -20,7 +19,7 @@ public class DrawPathLines : MonoBehaviour {
 				string[] coord = gps.Split (':');
 				if (coord.Length > 4) {
 					float x, y, z;
-					string name = coord [1];
+					//string name = coord [1];
 					float.TryParse (coord [2], out x);
 					float.TryParse (coord [3], out y);
 					float.TryParse (coord [4], out z);
@@ -41,9 +40,9 @@ public class DrawPathLines : MonoBehaviour {
 
 	void OnPostRender () {
 		if (points.Count > 1) {
-			Material lineMat = CreateLineMaterial ();
-			lineMat.SetPass (0);
-		
+			CreateLineMaterial ();
+            GL.PushMatrix();
+            lineMaterial.SetPass(0);
 			GL.Begin (GL.LINES);
 			GL.Color (lineColor);
 			for (int i = 1; i < points.Count; i++) {
@@ -51,23 +50,28 @@ public class DrawPathLines : MonoBehaviour {
 				GL.Vertex3 (points [i].x, points [i].y, points [i].z);
 			}
 			GL.End ();
+            GL.PopMatrix();
 		}
 	}
 
-	Material CreateLineMaterial() 
-	{
-		Material lineMaterial;
-		lineMaterial = new Material( "Shader \"Lines/Colored Blended\" {" +
-		                            "SubShader { Pass { " +
-		                            "    Blend SrcAlpha OneMinusSrcAlpha " +
-		                            "    ZTest Always " +
-		                            "    ZWrite Off Cull Off Fog { Mode Off } " +
-		                            "    BindChannels {" +
-		                            "      Bind \"vertex\", vertex Bind \"color\", color }" +
-		                            "} } }" );
-		lineMaterial.hideFlags = HideFlags.HideAndDontSave;
-		lineMaterial.shader.hideFlags = HideFlags.HideAndDontSave;
-		return lineMaterial;
-	}
+    static Material lineMaterial;
+    static void CreateLineMaterial()
+    {
+        if (!lineMaterial)
+        {
+            // Unity has a built-in shader that is useful for drawing
+            // simple colored things.
+            var shader = Shader.Find("Hidden/Internal-Colored");
+            lineMaterial = new Material(shader);
+            lineMaterial.hideFlags = HideFlags.HideAndDontSave;
+            // Turn on alpha blending
+            lineMaterial.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            lineMaterial.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+            // Turn backface culling off
+            lineMaterial.SetInt("_Cull", (int)UnityEngine.Rendering.CullMode.Off);
+            // Turn off depth writes
+            lineMaterial.SetInt("_ZWrite", 0);
+        }
+    }
 
 }

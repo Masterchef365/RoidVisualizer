@@ -1,6 +1,5 @@
 ﻿// Copyright (C) 2015 Duncan Freeman
 using UnityEngine;
-using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 

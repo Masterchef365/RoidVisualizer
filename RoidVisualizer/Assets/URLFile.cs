@@ -10,7 +10,7 @@ public class URLFile : MonoBehaviour {
     public GameObject pointManager;
     string dir;
 
-	void Start () {
+	public void Start () {
         dir = Application.dataPath + @"\" + fileName + ".txt";
 
         if (File.Exists(dir))
